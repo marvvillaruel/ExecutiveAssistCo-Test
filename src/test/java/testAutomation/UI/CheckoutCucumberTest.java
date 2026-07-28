@@ -31,6 +31,7 @@ public class CheckoutCucumberTest {
     SelenideElement checkoutSuccessMessage = $(By.xpath("//h2[@data-test='complete-header']"));
     SelenideElement goBackHomeButton = $(By.xpath("//button[@id='back-to-products']"));
     SelenideElement overviewItemPrice = $(By.xpath("//div[@data-test='inventory-item-price']"));
+    SelenideElement errorMessage = $(By.xpath("//h3[@data-test='error']"));
 
     String getItemName = "Sauce Labs Backpack";
     String getItemPrice;
@@ -104,6 +105,10 @@ public class CheckoutCucumberTest {
     @And("User fillout customer information")
     public void userFilloutCustomerInformation() {
         try {
+            continueButton.shouldBe(visible).click();
+            errorMessage.shouldBe(visible); // Hello, this where is my negative test :)
+
+
             firstNameField.shouldBe(visible).click();
             firstNameField.sendKeys(RandomStringUtils.randomAlphabetic(5));
             sleep(500);
