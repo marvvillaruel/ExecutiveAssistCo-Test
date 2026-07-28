@@ -1,17 +1,14 @@
 package testAutomation.UI;
-
-import com.codeborne.selenide.CollectionCondition;
-import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.conditions.Visible;
+import com.codeborne.selenide.WebDriverRunner;
+import io.cucumber.java.After;
 import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
 
 import java.time.Duration;
 
@@ -20,42 +17,30 @@ import static com.codeborne.selenide.Selenide.*;
 import static org.junit.Assert.*;
 
 public class LoginCucumberTest {
-    WebDriver driver;
-    String Url = "https://www.saucedemo.com/";
-    String getHeaderText = "Swag Labs";
-
-    String standardUserName = "standard_user";
-    String standardPassword = "secret_sauce";
-
-
     SelenideElement usernameField = $(By.xpath("//input[@id='user-name']"));
     SelenideElement passwordField = $(By.xpath("//input[@id='password']"));
     SelenideElement loginButton = $(By.xpath("//input[@id='login-button']"));
-
     ElementsCollection inventoryItems = $$x("//div[@data-test='inventory-item']");
 
     @Given("User navigates to Swag Labs login page")
     public void userNavigatesToSwagLabsLoginPage() {
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
         open("https://www.saucedemo.com/");
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-
+        WebDriverRunner.getWebDriver().manage().window().maximize();
     }
 
-    @And("User enter valid username and password")
-    public void userEnterValidUsernameAndPassword() {
+    @And("^User enter valid (.+) and (.+)$")
+    public void userEnterValidUsernameAndPassword(String username, String password) {
         try {
             usernameField.shouldBe(visible, Duration.ofSeconds(30)).click();
-            usernameField.sendKeys(standardUserName);
+            usernameField.sendKeys(username);
             sleep(1000);
 
             passwordField.shouldBe(visible).click();
-            passwordField.sendKeys(standardPassword);
+            passwordField.sendKeys(password);
 
-        }catch (NoSuchElementException e){
+        } catch (NoSuchElementException e) {
             e.printStackTrace();
-            fail("Not Able to enter valid username and password");
+            fail("Not able to enter valid username and password");
         }
     }
 
@@ -79,5 +64,10 @@ public class LoginCucumberTest {
             e.printStackTrace();
             fail("No Items are Present");
         }
+    }
+
+    @After
+    public void tearDown() {
+        closeWebDriver();
     }
 }
