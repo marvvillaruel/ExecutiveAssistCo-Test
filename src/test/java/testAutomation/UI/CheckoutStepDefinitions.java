@@ -1,14 +1,15 @@
 package testAutomation.UI;
 
-import org.junit.runner.RunWith;
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
+import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
 
 @CucumberOptions(
-        features = "src/test/resources/UI/login.feature",
+        features = "src/test/resources/UI/checkout.feature",
         glue = "testAutomation.UI")
 
-public class LoginStepDefinitions {
+public class CheckoutStepDefinitions {
+
 }
